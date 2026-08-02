@@ -6,6 +6,10 @@
 
 https://hoke0192.github.io/retention-os-frontend-complete/
 
+产品功能与使用指南：
+
+https://hoke0192.github.io/retention-os-frontend-complete/guide/
+
 ## 线上能力
 
 - 完整导航、组织下钻与角色权限视图

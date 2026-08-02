@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="留才 RetentionOS 产品功能介绍与使用指南" />
+    <title>留才 RetentionOS｜产品功能与使用指南</title>
+    <style>
+      :root {
+        --paper: #f4f0e7;
+        --ink: #171820;
+        --blue: #2253a5;
+        --blue-dark: #123368;
+        --orange: #f39a18;
+        --green: #199765;
+        --muted: #5d6573;
+        --line: #20222a;
+        --soft-line: rgba(23, 24, 32, 0.18);
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(34, 83, 165, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(34, 83, 165, 0.045) 1px, transparent 1px),
+          var(--paper);
+        background-size: 32px 32px;
+        font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+        line-height: 1.65;
+      }
+
+      a { color: inherit; }
+
+      .shell {
+        width: min(1240px, calc(100% - 64px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 76px;
+        border-bottom: 3px solid var(--line);
+        background: rgba(244, 240, 231, 0.94);
+        backdrop-filter: blur(14px);
+      }
+
+      .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+      .brand-mark {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        color: white;
+        background: var(--ink);
+        font: 800 21px/1 "STKaiti", "KaiTi", serif;
+      }
+      .brand strong { display: block; font-size: 15px; letter-spacing: 0.08em; }
+      .brand small { display: block; color: var(--muted); font-size: 11px; letter-spacing: 0.12em; }
+
+      .top-actions { display: flex; align-items: center; gap: 12px; }
+      .version { color: var(--muted); font: 700 11px/1 "SFMono-Regular", Consolas, monospace; letter-spacing: 0.08em; }
+
+      .button {
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 18px;
+        border: 2px solid var(--ink);
+        color: white;
+        background: var(--ink);
+        box-shadow: 4px 4px 0 var(--orange);
+        font-weight: 800;
+        text-decoration: none;
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+      .button:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--orange); }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.55fr);
+        gap: 48px;
+        align-items: end;
+        min-height: 500px;
+        padding: 84px 0 64px;
+        border-bottom: 2px solid var(--blue);
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--blue);
+        font: 800 13px/1 "SFMono-Regular", Consolas, monospace;
+        letter-spacing: 0.12em;
+      }
+
+      h1 {
+        max-width: 850px;
+        margin: 0;
+        font: 800 clamp(52px, 7.2vw, 104px)/0.96 "STKaiti", "KaiTi", serif;
+        letter-spacing: -0.05em;
+      }
+
+      .hero-copy > p:not(.eyebrow) {
+        max-width: 830px;
+        margin: 30px 0 0;
+        color: #49566e;
+        font-size: clamp(18px, 1.8vw, 25px);
+        font-weight: 650;
+      }
+
+      .signal-card {
+        position: relative;
+        padding: 30px;
+        border: 3px solid var(--ink);
+        background: var(--orange);
+        box-shadow: 11px 11px 0 var(--ink);
+      }
+      .signal-card::before {
+        content: "90D";
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        color: rgba(23, 24, 32, 0.24);
+        font: 900 50px/1 "Avenir Next", sans-serif;
+      }
+      .signal-card small { font-weight: 800; }
+      .signal-card strong { display: block; margin: 34px 0 8px; font-size: 44px; line-height: 1; }
+      .signal-card p { margin: 0; font-size: 13px; font-weight: 750; }
+
+      .quickfacts {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border: 2px solid var(--blue);
+        border-top: 0;
+        background: rgba(255, 255, 255, 0.42);
+      }
+      .quickfacts article { min-height: 132px; padding: 24px; border-right: 1px solid var(--blue); }
+      .quickfacts article:last-child { border-right: 0; }
+      .quickfacts small { display: block; color: var(--muted); font-weight: 700; }
+      .quickfacts strong { display: block; margin-top: 12px; color: var(--green); font-size: 29px; }
+
+      section { padding: 76px 0; border-bottom: 1px solid var(--soft-line); }
+      .section-head { display: grid; grid-template-columns: 170px 1fr; gap: 32px; margin-bottom: 34px; }
+      .section-no { color: var(--blue); font: 800 13px/1 "SFMono-Regular", Consolas, monospace; }
+      h2 { margin: 0; font: 800 clamp(34px, 4vw, 56px)/1.05 "STKaiti", "KaiTi", serif; letter-spacing: -0.035em; }
+      .section-intro { max-width: 800px; margin: 16px 0 0; color: var(--muted); font-size: 17px; }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        border: 2px solid var(--line);
+        background: rgba(255, 255, 255, 0.46);
+      }
+      .flow article { position: relative; min-height: 170px; padding: 22px; border-right: 1px solid var(--line); }
+      .flow article:last-child { border-right: 0; }
+      .flow span { color: var(--green); font: 800 12px "SFMono-Regular", Consolas, monospace; }
+      .flow h3 { margin: 28px 0 8px; font-size: 18px; }
+      .flow p { margin: 0; color: var(--muted); font-size: 13px; }
+
+      .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+      .feature {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        min-height: 174px;
+        padding: 26px;
+        border: 2px solid var(--blue);
+        background: rgba(255, 255, 255, 0.54);
+        transition: background 160ms ease, transform 160ms ease;
+      }
+      .feature:hover { transform: translateY(-3px); background: white; }
+      .feature-number { color: var(--green); font: 800 18px/1 "SFMono-Regular", Consolas, monospace; }
+      .feature h3 { margin: 0 0 8px; font-size: 21px; }
+      .feature p { margin: 0; color: var(--muted); font-size: 14px; }
+
+      .walkthrough { counter-reset: steps; border-top: 2px solid var(--line); }
+      .step {
+        counter-increment: steps;
+        display: grid;
+        grid-template-columns: 170px 1fr 220px;
+        gap: 32px;
+        align-items: center;
+        padding: 24px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .step::before { content: "0" counter(steps); color: var(--green); font: 800 24px "SFMono-Regular", Consolas, monospace; }
+      .step strong { font-size: 19px; }
+      .step p { margin: 4px 0 0; color: var(--muted); }
+      .step em { color: var(--blue); font-size: 13px; font-style: normal; font-weight: 800; text-align: right; }
+
+      .boundary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .boundary-card { padding: 30px; color: white; background: var(--blue-dark); }
+      .boundary-card.alert { background: var(--ink); }
+      .boundary-card span { color: #83cca9; font: 800 12px "SFMono-Regular", Consolas, monospace; }
+      .boundary-card h3 { margin: 28px 0 12px; font-size: 24px; }
+      .boundary-card ul { margin: 0; padding-left: 20px; color: #d7dce6; }
+      .boundary-card li + li { margin-top: 8px; }
+
+      .access {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 28px;
+        align-items: center;
+        padding: 42px;
+        border: 3px solid var(--ink);
+        background: white;
+        box-shadow: 10px 10px 0 var(--blue);
+      }
+      .access h2 { font-size: 38px; }
+      .access p { margin: 12px 0 0; color: var(--muted); }
+      .access-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+      .access-meta span { padding: 6px 10px; border: 1px solid var(--line); font-size: 12px; font-weight: 750; }
+
+      footer { display: flex; justify-content: space-between; gap: 24px; padding: 34px 0 48px; color: var(--muted); font-size: 12px; }
+
+      @media (max-width: 900px) {
+        .shell { width: min(100% - 30px, 720px); }
+        .hero { grid-template-columns: 1fr; min-height: 0; padding-top: 56px; }
+        .signal-card { max-width: 430px; }
+        .quickfacts, .feature-grid, .boundary-grid { grid-template-columns: 1fr 1fr; }
+        .quickfacts article:nth-child(2) { border-right: 0; }
+        .quickfacts article:nth-child(-n+2) { border-bottom: 1px solid var(--blue); }
+        .flow { grid-template-columns: 1fr; }
+        .flow article { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
+        .section-head, .step { grid-template-columns: 64px 1fr; }
+        .step em { grid-column: 2; text-align: left; }
+      }
+
+      @media (max-width: 620px) {
+        .topbar { align-items: flex-start; padding: 13px 0; }
+        .brand small, .version { display: none; }
+        .button { padding: 0 12px; }
+        h1 { font-size: 52px; }
+        .quickfacts, .feature-grid, .boundary-grid { grid-template-columns: 1fr; }
+        .quickfacts article { border-right: 0; border-bottom: 1px solid var(--blue); }
+        .feature { grid-template-columns: 50px 1fr; padding: 20px; }
+        .section-head { display: block; }
+        .section-no { display: block; margin-bottom: 14px; }
+        .step { grid-template-columns: 46px 1fr; gap: 14px; }
+        .access { grid-template-columns: 1fr; padding: 28px; }
+        footer { display: block; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="../#/overview" aria-label="返回留才 RetentionOS">
+          <span class="brand-mark">留才</span>
+          <span><strong>RETENTION OS</strong><small>PRODUCT GUIDE</small></span>
+        </a>
+        <div class="top-actions">
+          <span class="version">GUIDE / 2026.08</span>
+          <a class="button" href="../#/overview">进入系统 →</a>
+        </div>
+      </header>
+
+      <main>
+        <div class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">产品功能介绍 · 使用指南</p>
+            <h1>风险不是答案，行动才是。</h1>
+            <p>留才 RetentionOS 将人力数据连接为“风险识别—证据解释—人工复核—留任行动—效果跟踪”的组织决策闭环。</p>
+          </div>
+          <aside class="signal-card" aria-label="预测口径">
+            <small>预测口径</small>
+            <strong>未来 90 天</strong>
+            <p>低 &lt; 0.30 · 中 0.30–0.60 · 高 ≥ 0.60</p>
+          </aside>
+        </div>
+
+        <div class="quickfacts" aria-label="产品摘要">
+          <article><small>目标用户</small><strong>HR / HRBP</strong></article>
+          <article><small>业务模块</small><strong>7 个</strong></article>
+          <article><small>体验权限</small><strong>无需登录</strong></article>
+          <article><small>体验数据</small><strong>脱敏合成</strong></article>
+        </div>
+
+        <section id="positioning">
+          <div class="section-head">
+            <span class="section-no">01 / 产品定位</span>
+            <div>
+              <h2>从离职风险信号，走到可追踪的留任行动。</h2>
+              <p class="section-intro">面向企业 HR 负责人、HRBP 与授权业务经理，帮助组织更早发现人才流失信号、理解可能的影响因素，并通过人工判断形成支持性行动。系统提供决策支持，不代替管理者作出劳动关系决定。</p>
+            </div>
+          </div>
+          <div class="flow">
+            <article><span>01</span><h3>数据接入</h3><p>接收当前评分数据与历史数据，保留批次和时间口径。</p></article>
+            <article><span>02</span><h3>风险识别</h3><p>生成低、中、高风险与不可评分人群，并单列覆盖率。</p></article>
+            <article><span>03</span><h3>证据解释</h3><p>呈现主要驱动、影响方向、组织对比与非因果声明。</p></article>
+            <article><span>04</span><h3>人工复核</h3><p>由授权用户确认、驳回、暂缓或标记证据不足。</p></article>
+            <article><span>05</span><h3>行动跟踪</h3><p>记录负责人、期限、状态、结果并形成管理输出。</p></article>
+          </div>
+        </section>
+
+        <section id="features">
+          <div class="section-head">
+            <span class="section-no">02 / 核心功能</span>
+            <div>
+              <h2>七个模块，共同完成业务闭环。</h2>
+              <p class="section-intro">每个模块都有明确的业务对象和下一步动作，避免只展示图表却无法落地。</p>
+            </div>
+          </div>
+          <div class="feature-grid">
+            <article class="feature"><span class="feature-number">01</span><div><h3>决策总览</h3><p>集中查看覆盖率、风险分布、关键岗位信号、组织优先队列与本周决策焦点。</p></div></article>
+            <article class="feature"><span class="feature-number">02</span><div><h3>数据工坊</h3><p>通过数据角色、批次、字段检查、质量阻断和恢复记录管理分析输入；在线版支持 UTF-8 CSV 体验。</p></div></article>
+            <article class="feature"><span class="feature-number">03</span><div><h3>组织洞察</h3><p>按组织下钻，查看风险构成、趋势、部门对比、主要驱动和可干预方向。</p></div></article>
+            <article class="feature"><span class="feature-number">04</span><div><h3>复核工作台</h3><p>对匿名案例完成确认、驳回、证据不足或暂缓，并记录理由、责任人与时间。</p></div></article>
+            <article class="feature"><span class="feature-number">05</span><div><h3>行动中心</h3><p>建立支持性留任行动，设置目标、负责人、期限、状态和观察结果。</p></div></article>
+            <article class="feature"><span class="feature-number">06</span><div><h3>管理报告</h3><p>基于系统指标形成管理摘要，经过人工编辑确认后导出 PDF。</p></div></article>
+            <article class="feature"><span class="feature-number">07</span><div><h3>模型说明</h3><p>公开预测方法、特征边界、阈值版本、验证指标与已知限制。</p></div></article>
+            <article class="feature"><span class="feature-number">AI</span><div><h3>留任副驾</h3><p>基于当前组织、权限和证据回答问题；外部 AI 不可用时仍可生成可复现的证据化答案。</p></div></article>
+          </div>
+        </section>
+
+        <section id="walkthrough">
+          <div class="section-head">
+            <span class="section-no">03 / 推荐体验</span>
+            <div>
+              <h2>用十分钟走完一条完整路径。</h2>
+              <p class="section-intro">推荐使用桌面端 Chrome、Edge 或 Safari。系统无需测试账号，打开即可体验。</p>
+            </div>
+          </div>
+          <div class="walkthrough">
+            <article class="step"><div><strong>先看决策总览</strong><p>确认当前范围、预测窗口、覆盖率与优先组织。</p></div><em>约 1 分钟</em></article>
+            <article class="step"><div><strong>进入组织洞察</strong><p>点击部门完成下钻，查看风险构成、趋势与驱动因素。</p></div><em>约 2 分钟</em></article>
+            <article class="step"><div><strong>完成一次人工复核</strong><p>打开匿名案例，选择复核结论并填写理由后保存。</p></div><em>约 2 分钟</em></article>
+            <article class="step"><div><strong>创建并跟踪行动</strong><p>设置行动模板、负责人、截止日期、状态与观察指标。</p></div><em>约 2 分钟</em></article>
+            <article class="step"><div><strong>生成管理报告</strong><p>核对 AI 摘要与系统指标，确认后导出 PDF 管理摘要。</p></div><em>约 2 分钟</em></article>
+            <article class="step"><div><strong>查看模型说明</strong><p>了解预测口径、特征范围、阈值、校验方式与限制。</p></div><em>约 1 分钟</em></article>
+          </div>
+        </section>
+
+        <section id="boundaries">
+          <div class="section-head">
+            <span class="section-no">04 / 数据与边界</span>
+            <div>
+              <h2>可信、可解释，也明确知道不能做什么。</h2>
+            </div>
+          </div>
+          <div class="boundary-grid">
+            <article class="boundary-card">
+              <span>DATA & EVIDENCE</span>
+              <h3>数据与证据</h3>
+              <ul>
+                <li>公网体验使用脱敏合成数据，不包含真实员工信息。</li>
+                <li>不可评分人群独立呈现，不强行给出风险等级。</li>
+                <li>风险因素为模型解释，不被表述为离职原因或确定事实。</li>
+                <li>浏览器保存复核与行动状态，刷新后可继续体验。</li>
+              </ul>
+            </article>
+            <article class="boundary-card alert">
+              <span>HUMAN IN CONTROL</span>
+              <h3>人工决策边界</h3>
+              <ul>
+                <li>不得自动作出解雇、降薪、惩罚或否决晋升等决定。</li>
+                <li>不使用摄像头、情绪识别、私人通信或非必要监控。</li>
+                <li>个体信号必须经过授权用户复核后才能进入行动环节。</li>
+                <li>公网版本用于产品体验，不接入企业真实员工数据。</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="access">
+          <div class="access">
+            <div>
+              <h2>现在开始体验留才 RetentionOS。</h2>
+              <p>无需注册或测试 Key。进入系统后，可在顶部切换“当前角色”和组织范围，验证不同管理视角。</p>
+              <div class="access-meta"><span>公开访问</span><span>桌面端优先</span><span>无需账号</span><span>合成数据</span></div>
+            </div>
+            <a class="button" href="../#/overview">打开产品 →</a>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span>留才 RetentionOS · 组织离职预测分析系统</span>
+        <span>产品功能介绍与使用指南 · 2026.08</span>
+      </footer>
+    </div>
+  </body>
+</html>
