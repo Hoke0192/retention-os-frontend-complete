@@ -11,6 +11,7 @@ const navigation = [
   { to: '/workbench', icon: 'cases', label: '复核工作台', tag: '04' },
   { to: '/actions', icon: 'action', label: '行动中心', tag: '05' },
   { to: '/reports', icon: 'report', label: '管理报告', tag: '06' },
+  { to: '/model-info', icon: 'brain', label: '模型说明', tag: '07' },
 ]
 
 function AssistantPanel({ onClose }) {
